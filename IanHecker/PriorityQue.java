@@ -32,7 +32,7 @@ public class PriorityQue
         {
             addCollision(p, p.collidesX(t));
             addCollision(p, p.collidesY(t));
-            //addCollision(p, p.collides());
+            //addCollision(p, p.collides(t));
         }
     }
     /* Adds collisions in que-like fashion */
@@ -55,6 +55,9 @@ public class PriorityQue
     public QueItem delCollision()
     {
         QueItem qi = first.qi;
+        
+        //updateParticles(qi);
+        
         first = first.next;
         count--;
         if(isEmpty())   {last = null;}
@@ -67,23 +70,20 @@ public class PriorityQue
         
         for(int i = count; i < count+1; i++)
         {
-            if(first != null)
+            if(impendingCol.next != null)
             {
-                if(impendingCol.next != null)
+                if(impendingCol.getTime() > first.next.getTime())
                 {
-                    if(impendingCol.getTime() > first.next.getTime())
-                    {
-                        impendingCol = impendingCol.next;
-                        delCollision();
-                    }
-                    else if(impendingCol.getTime() < first.next.getTime())
-                    {
-                        Node newNext;//Temp holder
-                        newNext = impendingCol.next.next;//impendingCol's next item is next item's next
-                        impendingCol.next.next = null;//Remove impendingCol's next item's pointer for deletion
-                        impendingCol.next = newNext;//move next, next of impendingCol back to next
-                        count--;
-                    }
+                    impendingCol = impendingCol.next;
+                    delCollision();
+                }
+                else if(impendingCol.getTime() < first.next.getTime())
+                {
+                    Node newNext;//Temp holder
+                    newNext = impendingCol.next.next;//impendingCol's next item is next item's next
+                    impendingCol.next.next = null;//Remove impendingCol's next item's pointer for deletion
+                    impendingCol.next = newNext;//move next, next of impendingCol back to next
+                    count--;
                 }
             }
         }
