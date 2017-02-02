@@ -26,8 +26,8 @@ public class MDSimulation
         /* Initialize partticle(s) */
         PriorityQue PQ = new PriorityQue();
         
-        Particle parA = new Particle(0, 0, 0, 0, 5, 0.05);       
-        Particle parB = new Particle(-.5, 0, 0, 5, 5, 0.05);
+        Particle parA = new Particle(0, 1, 0, 0, 0, 0.05);       
+        Particle parB = new Particle(-1, 0, 1, .25, 5, 0.05);
         
         Particle[] pArray = {parA, parB};
         PQ.findCollisions(pArray, 0.0);//Initialize PQ with collision events                
@@ -45,12 +45,15 @@ public class MDSimulation
             ct = ct.setScale(2, BigDecimal.ROUND_DOWN);//Double.compare(collisionTime, t) == 0
             time = time.setScale(2, BigDecimal.ROUND_DOWN);            
             
-            if(ct.equals(time))//?????
+            if(ct.equals(time))
             {            
-                parB.bounceY();
-                PQ.delCollision();
-                PQ.findCollisions(pArray, t);
-                findNextCollision(PQ);                
+                parB.bounceX();                                
+                
+                PQ.delCollision();//Delete collision from que that just occurred
+                                  //Updates velocities of particles involved                
+                PQ.findCollisions(pArray, t);//Find new collisions from updated velocities
+                
+                findNextCollision(PQ);//Find next impending collision
             }                        
             
             /* Draw Particles */

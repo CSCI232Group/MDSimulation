@@ -41,7 +41,16 @@ public class Particle
         {return mass;}
     
     public double getRadius()
-        {return radius;}        
+        {return radius;}
+    
+    public void setRX(double rx)//Testing only
+        {this.rx = rx;}
+    
+    public void setRY(double ry)//Testing only
+        {this.ry = ry;}
+    
+    public void setVY()//TESTING ONLY
+        {vy = -1 * vy;}
     
     public double getFutureRX(double t)
         {return rx + (t * vx);}
@@ -82,10 +91,8 @@ public class Particle
     }
     public void bounceX()
         {vx = -vx;}
-    
     public void bounceY()
         {vy = -vy;}
-    
     public void bounce(Particle b)
     {
     
