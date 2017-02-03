@@ -10,16 +10,19 @@ Where is everyone else at? What are the ideas going around?
 
 
 **Jake**
+
 1.
 2.
 3.
 
 **Garret**
+
 1.
 2.
 3.
 
 **Michael**
+
 1.
 2.
 3.
