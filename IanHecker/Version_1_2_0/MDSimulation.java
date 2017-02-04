@@ -22,7 +22,7 @@ public class MDSimulation
     
     public MDSimulation(Particle[] particles)
     {
-        this.particleArray = particles;
+        this.particleArray = particles;        
     }
     
     public static void main(String[] args)
@@ -37,27 +37,27 @@ public class MDSimulation
         Particle parC = new Particle(1, 0, 0, 0, 5, 0.05, Color.ORANGE);
         Particle[] particles = {parA, parB, parC};
         
-        MDSimulation simulation = new MDSimulation(particles);        
-        Particle[] particleArray = simulation.particleArray;           
-        
-        simulation.findCollisions(particleArray, 0.0);
+        MDSimulation simulation = new MDSimulation(particles);                                
         simulation.runSimulation();                    
               
     }//End of Main
     public void runSimulation()
-    {                                   
+    {             
+        PQ = new PriorityQue();
+        findCollisions(particleArray, t);
+        
+        PQ.insertCollision(null, null, 0);
+        
         while(!PQ.isEmpty())
-        {
+        {                        
             QueItem qi = PQ.delCollision();
             if(qi.isInvalidated()) continue;//If valid, continue
-            Particle a = qi.getParColliding(0);
-            Particle b = qi.getParColliding(1);
+            Particle a = qi.getParOne();
+            Particle b = qi.getParTwo();
         
             //for(double t = 0.00; true; t += 0.01){}                
                 for(Particle p : particleArray)                
-                {p.updatePosition(qi.getTime() - t);
-                 p.drawParticle();}
-                
+                {p.updatePosition(qi.getTime() - t);}                
                 t = qi.getTime();
                     
                 if(a != null && b != null)
@@ -87,22 +87,20 @@ public class MDSimulation
         for(Particle p : allParticles)
         {
             for(int iter = 0; iter < allParticles.length; iter++)
-            {
+            {                
                 double deltaT = p.timeToParticleCollision(allParticles[iter]);
                 double deltaTX = p.timeToVertWall();
                 double deltaTY = p.timeToHorizWall();
                 
                 if(deltaT + time < TIME_LIMIT){
-                    Particle[] parColliding = {p, allParticles[iter]};
-                    PQ.insertCollision(parColliding, deltaT + time);}
+                    Particle p2 = allParticles[iter];
+                    PQ.insertCollision(p, p2, deltaT + time);}
                                     
-                if(deltaTX + time < TIME_LIMIT){
-                    Particle[] parColliding = {p};
-                    PQ.insertCollision(parColliding, deltaTX + time);}
+                if(deltaTX + time < TIME_LIMIT){                    
+                    PQ.insertCollision(p, null, deltaTX + time);}
                 
-                if(deltaTY + time < TIME_LIMIT){
-                    Particle[] parColliding = {p};
-                    PQ.insertCollision(parColliding, deltaTX + time);}
+                if(deltaTY + time < TIME_LIMIT){                    
+                    PQ.insertCollision(p, null, deltaTX + time);}
             }
         }
     }

@@ -23,11 +23,11 @@ public class PriorityQue
     public boolean isEmpty()    {return first == null;}
     public int count()          {return count;}        
     
-    public void insertCollision(Particle[] parColliding, double time)
+    public void insertCollision(Particle p, Particle p2, double time)
     {
         if(time != NO_COLLISION)
         {
-            QueItem qi = new QueItem(parColliding, time);
+            QueItem qi = new QueItem(p, p2, time);
             
             Node oldLast = last;
             last = new Node();
@@ -80,21 +80,25 @@ public class PriorityQue
     /* Inner class that holds data for each collision in PQ */
     public class QueItem
     {
-        private Particle[] ParColliding; //Particle involved in collision
+        private Particle p; //Particle involved in collision
+        private Particle p2;
         private boolean invalidated; //Will event occur or has previous collison rendered invalid
         private double time; //When event will occur        
         
         private QueItem(){}
         
-        private QueItem(Particle[] particles, double time)
+        private QueItem(Particle p, Particle p2, double time)
         {
-            this.ParColliding = particles;            
+            this.p = p; this. p2 = p2;            
             this.time = time;
             this.invalidated = false;
         }
         
-        public Particle getParColliding(int iter)
-            {return ParColliding[iter];}
+        public Particle getParOne()
+            {return p;}
+        
+        public Particle getParTwo()
+            {return p2;}
         
         public double getTime()
             {return time;}
