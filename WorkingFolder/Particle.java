@@ -33,7 +33,7 @@ public class Particle
     {
         this.rx = rx; this.ry = ry;
         this.vx = vx; this.vy = vy;
-        this.mass = mass; this.radius = radius;
+        this.mass = mass; this.radius = 100*radius;
         this.color = color;
     }
 

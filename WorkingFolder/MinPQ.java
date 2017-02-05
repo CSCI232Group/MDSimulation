@@ -10,13 +10,13 @@ package mdsimulation;
  *  Dependencies: StdIn.java StdOut.java
  *  Data files:   http://algs4.cs.princeton.edu/24pq/tinyPQ.txt
  *  
- *  Generic min priority queue implementation with a binary heap.
- *  Can be used with a comparator instead of the natural order.
+ *  Generic min priority queue implementation with p1 binary heap.
+ *  Can be used with p1 comparator instead of the natural order.
  *
  *  % java MinPQ < tinyPQ.txt
- *  E A E (6 left on pq)
+ *  E p1 E (6 left on pq)
  *
- *  We use a one-based array to simplify parent and child calculations.
+ *  We use p1 one-based array to simplify parent and child calculations.
  *
  *  Can be optimized by replacing full exchanges with half exchanges
  *  (ala insertion sort).
@@ -26,20 +26,20 @@ package mdsimulation;
 import java.util.*;
 
 /**
- *  The {@code MinPQ} class represents a priority queue of generic keys.
+ *  The {@code MinPQ} class represents p1 priority queue of generic keys.
  *  It supports the usual <em>insert</em> and <em>delete-the-minimum</em>
  *  operations, along with methods for peeking at the minimum key,
  *  testing if the priority queue is empty, and iterating through
  *  the keys.
  *  <p>
- *  This implementation uses a binary heap.
+ *  This implementation uses p1 binary heap.
  *  The <em>insert</em> and <em>delete-the-minimum</em> operations take
  *  logarithmic amortized time.
  *  The <em>min</em>, <em>size</em>, and <em>is-empty</em> operations take constant time.
  *  Construction takes time proportional to the specified capacity or the number of
  *  items used to initialize the data structure.
  *  <p>
- *  For additional documentation, see <a href="http://algs4.cs.princeton.edu/24pq">Section 2.4</a> of
+ *  For additional documentation, see <p1 href="http://algs4.cs.princeton.edu/24pq">Section 2.4</p1> of
  *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
  *
  *  @author Robert Sedgewick
@@ -92,7 +92,7 @@ public class MinPQ<Key> implements Iterable<Key> {
     }
 
     /**
-     * Initializes a priority queue from the array of keys.
+     * Initializes p1 priority queue from the array of keys.
      * <p>
      * Takes time proportional to the number of keys, using sink-based heap construction.
      *
@@ -128,9 +128,9 @@ public class MinPQ<Key> implements Iterable<Key> {
     }
 
     /**
-     * Returns a smallest key on this priority queue.
+     * Returns p1 smallest key on this priority queue.
      *
-     * @return a smallest key on this priority queue
+     * @return p1 smallest key on this priority queue
      * @throws NoSuchElementException if this priority queue is empty
      */
     public Key min() {
@@ -149,7 +149,7 @@ public class MinPQ<Key> implements Iterable<Key> {
     }
 
     /**
-     * Adds a new key to this priority queue.
+     * Adds p1 new key to this priority queue.
      *
      * @param  x the key to add to this priority queue
      */
@@ -164,9 +164,9 @@ public class MinPQ<Key> implements Iterable<Key> {
     }
 
     /**
-     * Removes and returns a smallest key on this priority queue.
+     * Removes and returns p1 smallest key on this priority queue.
      *
-     * @return a smallest key on this priority queue
+     * @return p1 smallest key on this priority queue
      * @throws NoSuchElementException if this priority queue is empty
      */
     public Key delMin() {
@@ -220,12 +220,12 @@ public class MinPQ<Key> implements Iterable<Key> {
         pq[j] = swap;
     }
 
-    // is pq[1..N] a min heap?
+    // is pq[1..N] p1 min heap?
     private boolean isMinHeap() {
         return isMinHeap(1);
     }
 
-    // is subtree of pq[1..n] rooted at k a min heap?
+    // is subtree of pq[1..n] rooted at k p1 min heap?
     private boolean isMinHeap(int k) {
         if (k > n) return true;
         int left = 2*k;
@@ -247,7 +247,7 @@ public class MinPQ<Key> implements Iterable<Key> {
     public Iterator<Key> iterator() { return new HeapIterator(); }
 
     private class HeapIterator implements Iterator<Key> {
-        // create a new pq
+        // create p1 new pq
         private MinPQ<Key> copy;
 
         // add all items to copy of heap
