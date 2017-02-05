@@ -8,7 +8,6 @@ package mdsimulation;
 
 import edu.princeton.cs.algs4.StdDraw;
 import java.awt.Color;
-import static mdsimulation.PriorityQue.NO_COLLISION;
 
 /*@author Ian 
  * Formatting of formulas in the methods involving
@@ -22,6 +21,8 @@ import static mdsimulation.PriorityQue.NO_COLLISION;
  */
 public class Particle
 {
+    private static final double INFINITY = Double.POSITIVE_INFINITY;
+    
     private double rx, ry;
     private double vx, vy;
     private final double mass, radius;
@@ -61,7 +62,7 @@ public class Particle
         double dt;
         if(vx > 0)          dt = (2 - radius - rx) / vx;        
         else if (vx < 0)    dt = (-2 + radius - rx) / vx;        
-        else                dt = NO_COLLISION;                        
+        else                dt = INFINITY;                        
         return dt;
     }
     public double timeToHorizWall()
@@ -69,24 +70,24 @@ public class Particle
         double dt;
         if(vy > 0)          dt = (2 - radius - ry) / vy;        
         else if (vy < 0)    dt = (-2 + radius - ry) / vy;       
-        else                dt = NO_COLLISION;
+        else                dt = INFINITY;
         return dt;
     }
     public double timeToParticleCollision(Particle other)
     {
-            if(other == this) return NO_COLLISION;
+            if(other == this) return INFINITY;
         double dx, dy, dvx, dvy, dvdr, drdr, dvdv, sigma, d;
         dx = other.rx - this.rx;
         dy = other.ry - this.ry;
         dvx = other.vx - this.vx;
         dvy = other.vy - this.vy;            
         dvdr = dx*dvx + dy*dvy;
-            if(dvdr > 0) return NO_COLLISION;
+            if(dvdr > 0) return INFINITY;
         dvdv = dvx*dvx + dvy*dvy;
         drdr = dx*dx + dy*dy;
         sigma = other.radius + this.radius;
         d = dvdr*dvdr - dvdv * (drdr - sigma*sigma);
-            if(d < 0) return NO_COLLISION;
+            if(d < 0) return INFINITY;
             return -(dvdr + Math.sqrt(d)) / dvdv;
         
     }
