@@ -8,7 +8,6 @@ package mdsimulation;
 import edu.princeton.cs.algs4.StdDraw;
 import java.awt.Color;
 import mdsimulation.PriorityQue.QueItem;
-
 /**
  *
  * @author Ian Hecker
@@ -38,7 +37,7 @@ public class MDSimulation
         Particle[] particles = {parA, parB, parC};
         
         MDSimulation simulation = new MDSimulation(particles);                                
-        simulation.runSimulation();                    
+        simulation.runSimulation();                   
               
     }//End of Main
     public void runSimulation()
@@ -49,7 +48,7 @@ public class MDSimulation
         PQ.insertCollision(null, null, 0);
         
         while(!PQ.isEmpty())
-        {                        
+        {               
             QueItem qi = PQ.delCollision();
             if(qi.isInvalidated()) continue;//If valid, continue
             Particle a = qi.getParOne();
@@ -67,11 +66,11 @@ public class MDSimulation
                     {
                         if(a.whichWall() == "both")
                             {a.bounceOffVert();
-                             a.bounceOffHoriz();}
+                             a.bounceOffHoriz();}                             
                         else if(a.whichWall() == "vert")
-                            {a.bounceOffVert();}
+                            {a.bounceOffVert();}                             
                         else if(a.whichWall() == "horiz")
-                            {a.bounceOffHoriz();}
+                            {a.bounceOffHoriz();}                             
                         else
                             {StdDraw.clear();
                             for(Particle p : particleArray)
