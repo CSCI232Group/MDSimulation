@@ -23,20 +23,20 @@ public class MDSimulation
     {
         this.particleArray = particles;        
     }        
-    public void findCollisions(Particle p1)
+    public void findCollisions(Particle p1, double limit)
     {     
         if(p1 == null) return;
         
         for(int iter = 0; iter < particleArray.length; iter++)
         {
             double dt = p1.timeToParticleCollision(particleArray[iter]);
-            if(t + dt <= TIME_LIMIT)              
+            if(t + dt <= limit)              
                 PQ.insert(new Event(t, p1, particleArray[iter]));
         }
         double dtx = p1.timeToVertWall();
         double dty = p1.timeToHorizWall();
-        if(t + dtx < TIME_LIMIT){PQ.insert(new Event(t + dtx, p1, null));}
-        if(t + dty < TIME_LIMIT){PQ.insert(new Event(t + dty, null, p1));}        
+        if(t + dtx <= limit){PQ.insert(new Event(t + dtx, p1, null));}
+        if(t + dty <= limit){PQ.insert(new Event(t + dty, null, p1));}        
     }
     private void reDraw()
     {
@@ -48,11 +48,11 @@ public class MDSimulation
             if(t < TIME_LIMIT)
                 {PQ.insert(new Event(t + 1.0 / 0.5, null, null));}
     }
-    public void runSimulation()
+    public void runSimulation(double limit)
     { 
         PQ = new MinPQ<Event>();
         for(Particle p : particleArray)
-            {findCollisions(p);}
+            {findCollisions(p, limit);}
         
         PQ.insert(new Event(0, null, null));
         
@@ -73,8 +73,8 @@ public class MDSimulation
                 else if(a == null && b != null) {b.bounceOffHoriz();}
                 else if(a == null && b == null) {reDraw();}
                     
-                findCollisions(a);
-                findCollisions(b);
+                findCollisions(a, limit);
+                findCollisions(b, limit);
         }
         
     }
@@ -113,13 +113,13 @@ public class MDSimulation
         StdDraw.enableDoubleBuffering();
         
         /* Initialize particle(s) */
-        Particle parA = new Particle(0, 1, 0, 0, 5, 0.05, Color.RED);       
-        Particle parB = new Particle(-1, 0, 1, .25, 5, 0.05, Color.BLUE);
-        Particle parC = new Particle(1, 0, 0, 0, 5, 0.05, Color.ORANGE);
+        Particle parA = new Particle(0, 1, 0, 0, 0.05, 0.05, Color.RED);       
+        Particle parB = new Particle(-1, 0, 0, 0.05, 0.05, 0.05, Color.BLUE);
+        Particle parC = new Particle(1, 0, 0, 0, 0.05, 0.05, Color.ORANGE);
         Particle[] particles = {parA, parB, parC};                
         
         MDSimulation simulation = new MDSimulation(particles);                                
-        simulation.runSimulation();                   
+        simulation.runSimulation(10000);                   
               
     }//End of Main        
 }//End of MDSimulation Class
