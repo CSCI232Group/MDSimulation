@@ -1,45 +1,45 @@
-/* Class: CSCI 232
- * Author: Micheal Hewitt, Ian Hecker, Jacob Yakawich, Garret Hilton
- * Lab1: Collision System
- * We did use an outline to help us but the code is mostly ourselves.
-*/
+/*
+ * 
+ * 
+ * 
+ */
+package mdsimulation;
 
-package mdsimulation;                                                   //The project name we are working on
 
-                                                                        //Libraries we are using 
-import java.awt.*;  
 import edu.princeton.cs.algs4.StdDraw;
 import java.awt.Color;
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.Scanner;
-                                                                        // Our main where we will be running everything off of.
+/**
+ *
+ * @author Ian Hecker
+ */
 public class MDSimulation
 {              
-    private MinPQ<QueueItem> PQ;                                        // We are starting to set up the Priority Que
-    private double t = 0.0;                                             // We are setting up the clock
-    private Particle[] particleArray;                                   // This is an arrary for the particles 
+    private MinPQ<QueueItem> PQ;
+    private double t = 0.0;
+    private Particle[] particleArray;
     
-    public MDSimulation(Particle[] particles)                           // We are now starting up our system wih a set of particles
+    public MDSimulation(Particle[] particles)
     {
         this.particleArray = particles.clone();        
     }        
-    public void findCollisions(Particle p1, double limit)               // We are updating the Priority Que 
+    public void findCollisions(Particle p1, double limit)
     {     
         if(p1 == null) return;
         
         for(int iter = 0; iter < particleArray.length; iter++)
         {
-            double dt = p1.timeToParticleCollision(particleArray[iter]);    // If an object hits another object this will run
+            double dt = p1.timeToParticleCollision(particleArray[iter]);
             if(t + dt <= limit)              
                 PQ.insert(new QueueItem(t + dt, p1, particleArray[iter]));
         }
-        double dtx = p1.timeToVertWall();                                   // If an object hits a wall this will run
+        double dtx = p1.timeToVertWall();
         double dty = p1.timeToHorizWall();
         if(t + dtx <= limit){PQ.insert(new QueueItem(t + dtx, p1, null));}
         if(t + dty <= limit){PQ.insert(new QueueItem(t + dty, null, p1));}        
     }
-    private void reDraw(double limit)                                       // We are redrawing each object
+    private void reDraw(double limit)
     {
         StdDraw.clear();
         for(Particle p : particleArray)
@@ -49,42 +49,42 @@ public class MDSimulation
             if(t <= limit)
                 {PQ.insert(new QueueItem(t + 1.0 / 0.5, null, null));}
     }
-    public void runSimulation(double limit)                                 // We are stating that this will run for a curtain amount of time
+    public void runSimulation(double limit)
     { 
         PQ = new MinPQ<QueueItem>();
-        for(Particle p : particleArray)                                     // We are starting the Priority Que with collision and redrawing the object
+        for(Particle p : particleArray)
             {findCollisions(p, limit);}
         
         PQ.insert(new QueueItem(0, null, null));
         
-        while(!PQ.isEmpty())                                                // This is a loop for our program
+        while(!PQ.isEmpty())
         {               
             QueueItem ev = PQ.delMin();
-            if(!ev.isValidated()) continue;                                 //If valid, continue
+            if(!ev.isValidated()) continue;//If valid, continue
             Particle p1 = ev.p1;
             Particle p2 = ev.p2;
         
-                                                                             //for(double t = 0.00; true; t += 0.01){}                
+            //for(double t = 0.00; true; t += 0.01){}                
                 for(Particle p : particleArray)                
                     {p.updatePosition(ev.time - t);}                
                 t = ev.time;
                     
-                if(p1 != null && p2 != null)      {p1.bounceOffOther(p2);}       // objects collide        
-                else if(p1 != null && p2 == null) {p1.bounceOffVert();}          // wall collide
-                else if(p1 == null && p2 != null) {p2.bounceOffHoriz();}         // wall collide
-                else if(p1 == null && p2 == null) {reDraw(limit);}               // redraw 
+                if(p1 != null && p2 != null)      {p1.bounceOffOther(p2);}               
+                else if(p1 != null && p2 == null) {p1.bounceOffVert();}
+                else if(p1 == null && p2 != null) {p2.bounceOffHoriz();}
+                else if(p1 == null && p2 == null) {reDraw(limit);}
                     
-                findCollisions(p1, limit);                                   //restarting the priority que
+                findCollisions(p1, limit);
                 findCollisions(p2, limit);
         }        
     }
     private static class QueueItem implements Comparable<QueueItem> {
-        private final double time;                                          // timing on each Que
-        private final Particle p1, p2;                                      // objects involved in Que
-        private final int countOne, countTwo;                               // counts the impacts
+        private final double time;
+        private final Particle p1, p2;
+        private final int countOne, countTwo;
         
         
-        public QueueItem(double t, Particle p1, Particle p2) {              // new QueueItem created
+        public QueueItem(double t, Particle p1, Particle p2) {
             this.time = t;
             this.p1 = p1;
             this.p2 = p2;
@@ -94,12 +94,12 @@ public class MDSimulation
             else            countTwo = -1;
         }
         
-        public int compareTo(QueueItem that) {                              //comparison int
+        public int compareTo(QueueItem that) {
             return Double.compare(this.time, that.time);
         }
                 
-                                                                            //Events wil be invalidated if particles have collided more than
-                                                                            //when event was predicted
+        //Events wil be invalidated if particles have collided more than
+        //when event was predicted
         public boolean isValidated() {
             if (p1 != null && p1.getCollisionCount() != countOne)
                 return false;
@@ -109,21 +109,27 @@ public class MDSimulation
                 return true;
         }
     }    
-    public static void main(String[] args) throws FileNotFoundException
+    public static void main(String[] args) throws IOException
     {   
-                                                                           //Setting scale of window DO NOT CHANGE
-        StdDraw.setScale(-2, +2);        
+        //Setting scale of window DO NOT CHANGE
+        StdDraw.setCanvasSize(800, 800);                        
         StdDraw.enableDoubleBuffering();
         
         
-                                                                             // Initialize particle(s) 
-        //Particle parA = new Particle(-2, 0, 0.1, 0.01, 0.05, 0.05, Color.RED);       
-        //Particle parB = new Particle(-2, -2, 0, 0, 0.05, 0.05, Color.BLUE);       Test
-        //Particle parC = new Particle(2, 0, -0.01, 0, 0.5, 0.5, Color.ORANGE);
+        /* Initialize particle(s) *//*
+        Particle parA = new Particle(-2, 0, 0.1, 0.01, 0.05, 0.05, Color.RED);       
+        Particle parB = new Particle(-2, -2, 0, 0, 0.05, 0.05, Color.BLUE);
+        Particle parC = new Particle(2, 0, -0.01, 0, 0.5, 0.5, Color.ORANGE);
         Particle[] particles = {parA, parB, parC};*/
-        File file=new File("src\\mdsimulation\\input.txt");    
-        Scanner scan=new Scanner(file);
-        int n=scan.nextInt();
+        
+         // first check to see if the program was run with the command line argument
+        if(args.length < 1) {
+            System.out.println("Error, usage: java ClassName inputfile");
+            System.exit(1);
+        }                   
+        Scanner scan = new Scanner(new FileInputStream(args[0]));        
+        
+        int n = scan.nextInt();
         Particle[] particles = new Particle[n]; 
         /* Initialize particle(s) */
         for (int i = 0; i < n; i++) {
@@ -141,9 +147,9 @@ public class MDSimulation
               
     }
         
-                                                                                    //Create new simulation, call simulation of particles inputted
+        //Create new simulation, call simulation of particles inputted
         MDSimulation simulation = new MDSimulation(particles);                                
         simulation.runSimulation(10000);                   
               
-    }                                                                               //End of Main        
-}                                                                                   //End of MDSimulation Class
+    }//End of Main        
+}//End of MDSimulation Class
