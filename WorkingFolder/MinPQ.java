@@ -1,11 +1,5 @@
 package mdsimulation;
 
-
-
-
-
-
-
 import java.util.*;
 
 
@@ -98,14 +92,14 @@ public class MinPQ<Key> implements Iterable<Key> {
     }
 
 
-
+    //moves key up the tree
     private void swim(int k) {
         while (k > 1 && greater(k/2, k)) {
             exch(k, k/2);
             k = k/2;
         }
     }
-
+    //moves key down in tree
     private void sink(int k) {
         while (2*k <= n) {
             int j = 2*k;
@@ -115,10 +109,7 @@ public class MinPQ<Key> implements Iterable<Key> {
             k = j;
         }
     }
-
-   /***************************************************************************
-    * Helper functions for compares and swaps.
-    ***************************************************************************/
+    //compares two integers
     private boolean greater(int i, int j) {
         if (comparator == null) {
             return ((Comparable<Key>) pq[i]).compareTo(pq[j]) > 0;
@@ -127,19 +118,19 @@ public class MinPQ<Key> implements Iterable<Key> {
             return comparator.compare(pq[i], pq[j]) > 0;
         }
     }
-
-    private void exch(int i, int j) {
+        //swap two keys
+       private void exch(int i, int j) {
         Key swap = pq[i];
         pq[i] = pq[j];
         pq[j] = swap;
     }
 
-    // is pq[1..N] p1 min heap?
+   //is this the minheap
     private boolean isMinHeap() {
         return isMinHeap(1);
     }
 
-    // is subtree of pq[1..n] rooted at k p1 min heap?
+    //is heap rooted at k min heap
     private boolean isMinHeap(int k) {
         if (k > n) return true;
         int left = 2*k;
@@ -150,22 +141,14 @@ public class MinPQ<Key> implements Iterable<Key> {
     }
 
 
-    /**
-     * Returns an iterator that iterates over the keys on this priority queue
-     * in ascending order.
-     * <p>
-     * The iterator doesn't implement {@code remove()} since it's optional.
-     *
-     * @return an iterator that iterates over the keys in ascending order
-     */
+  
     public Iterator<Key> iterator() { return new HeapIterator(); }
-
+    //create pq copy
     private class HeapIterator implements Iterator<Key> {
-        // create p1 new pq
+       
         private MinPQ<Key> copy;
 
         // add all items to copy of heap
-        // takes linear time since already in heap order so no keys move
         public HeapIterator() {
             if (comparator == null) copy = new MinPQ<Key>(size());
             else                    copy = new MinPQ<Key>(size(), comparator);
@@ -182,11 +165,7 @@ public class MinPQ<Key> implements Iterable<Key> {
         }
     }
 
-    /**
-     * Unit tests the {@code MinPQ} data type.
-     *
-     * @param args the command-line arguments
-     */
+    
    
 
 }
