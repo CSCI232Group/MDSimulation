@@ -23,7 +23,7 @@ public class Particle
     private int collisionCount;
     private final Color color;
             
-    public Particle(double rx, double ry, double vx, double vy, double mass, double radius, Color color)
+    public Particle(double rx, double ry, double vx, double vy, double radius, double mass, Color color)
     {
         this.rx = rx; this.ry = ry;
         this.vx = vx; this.vy = vy;
