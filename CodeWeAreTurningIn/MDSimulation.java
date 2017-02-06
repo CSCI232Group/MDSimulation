@@ -1,7 +1,11 @@
 /* Class: CSCI 232
  * Author: Micheal Hewitt, Ian Hecker, Jacob Yakawich, Garret Hilton
  * Lab1: Collision System
- * We did use an outline to help us but the code is mostly ourselves.
+ * This main class for our particle simulation is modeled after 
+ * ~Robert Sedgewick~
+ * ~Kevin Wayne~
+ * design. Because we liked and used a similar design to their priority Que, 
+ * similar steps had to be taken to use the PQ correctly
 */
 package mdsimulation;//The project name we are working on
 
@@ -32,12 +36,12 @@ public class MDSimulation// Our main where we will be running everything off of.
         {
             double dt = p1.timeToParticleCollision(particleArray[iter]);// If an object hits another object this will run
             if(t + dt <= limit)              
-                PQ.insert(new QueueItem(t + dt, p1, particleArray[iter]));
+                PQ.insertCollision(new QueueItem(t + dt, p1, particleArray[iter]));
         }
         double dtx = p1.timeToVertWall();//If an object hits a wall this will run
         double dty = p1.timeToHorizWall();
-        if(t + dtx <= limit){PQ.insert(new QueueItem(t + dtx, p1, null));}
-        if(t + dty <= limit){PQ.insert(new QueueItem(t + dty, null, p1));}        
+        if(t + dtx <= limit){PQ.insertCollision(new QueueItem(t + dtx, p1, null));}
+        if(t + dty <= limit){PQ.insertCollision(new QueueItem(t + dty, null, p1));}        
     }
     private void reDraw(double limit)//We are redrawing each object
     {
@@ -47,7 +51,7 @@ public class MDSimulation// Our main where we will be running everything off of.
         StdDraw.show();
         StdDraw.pause(20);
             if(t <= limit)
-                {PQ.insert(new QueueItem(t + 1.0 / 0.5, null, null));}
+                {PQ.insertCollision(new QueueItem(t + 1.0 / 0.5, null, null));}
     }
     public void runSimulation(double limit)// We are stating that this will run for a curtain amount of time
     { 
@@ -55,11 +59,11 @@ public class MDSimulation// Our main where we will be running everything off of.
         for(Particle p : particleArray)// We are starting the Priority Que with collision and redrawing the object
             {findCollisions(p, limit);}
         
-        PQ.insert(new QueueItem(0, null, null));
+        PQ.insertCollision(new QueueItem(0, null, null));
         
         while(!PQ.isEmpty())// This is a loop for our program
         {               
-            QueueItem ev = PQ.delMin();
+            QueueItem ev = PQ.delMinCollision();
             if(!ev.isValidated()) continue;//If valid, continue
             Particle p1 = ev.p1;
             Particle p2 = ev.p2;
