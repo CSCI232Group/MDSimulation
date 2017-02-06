@@ -1,3 +1,8 @@
+/* Class: CSCI 232
+ * Author: Micheal Hewitt, Ian Hecker, Jacob Yakawich, Garret Hilton
+ * Lab1: Collision System
+ * We did use an outline to help us but the code is mostly ourselves.
+*/
 package mdsimulation;
 
 import java.util.*;
