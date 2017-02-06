@@ -4,100 +4,40 @@ package mdsimulation;
 
 
 
-/******************************************************************************
- *  Compilation:  javac MinPQ.java
- *  Execution:    java MinPQ < input.txt
- *  Dependencies: StdIn.java StdOut.java
- *  Data files:   http://algs4.cs.princeton.edu/24pq/tinyPQ.txt
- *  
- *  Generic min priority queue implementation with p1 binary heap.
- *  Can be used with p1 comparator instead of the natural order.
- *
- *  % java MinPQ < tinyPQ.txt
- *  E p1 E (6 left on pq)
- *
- *  We use p1 one-based array to simplify parent and child calculations.
- *
- *  Can be optimized by replacing full exchanges with half exchanges
- *  (ala insertion sort).
- *
- ******************************************************************************/
+
 
 import java.util.*;
 
-/**
- *  The {@code MinPQ} class represents p1 priority queue of generic keys.
- *  It supports the usual <em>insert</em> and <em>delete-the-minimum</em>
- *  operations, along with methods for peeking at the minimum key,
- *  testing if the priority queue is empty, and iterating through
- *  the keys.
- *  <p>
- *  This implementation uses p1 binary heap.
- *  The <em>insert</em> and <em>delete-the-minimum</em> operations take
- *  logarithmic amortized time.
- *  The <em>min</em>, <em>size</em>, and <em>is-empty</em> operations take constant time.
- *  Construction takes time proportional to the specified capacity or the number of
- *  items used to initialize the data structure.
- *  <p>
- *  For additional documentation, see <p1 href="http://algs4.cs.princeton.edu/24pq">Section 2.4</p1> of
- *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
- *
- *  @author Robert Sedgewick
- *  @author Kevin Wayne
- *
- *  @param <Key> the generic type of key on this priority queue
- */
-public class MinPQ<Key> implements Iterable<Key> {
-    private Key[] pq;                    // store items at indices 1 to n
-    private int n;                       // number of items on priority queue
-    private Comparator<Key> comparator;  // optional comparator
 
-    /**
-     * Initializes an empty priority queue with the given initial capacity.
-     *
-     * @param  initCapacity the initial capacity of this priority queue
-     */
+public class MinPQ<Key> implements Iterable<Key> {
+    //variable initializers
+    private Key[] pq;                    
+    private int n;                       
+    private Comparator<Key> comparator;  
+
+    //initializers for priority queue
     public MinPQ(int initCapacity) {
         pq = (Key[]) new Object[initCapacity + 1];
         n = 0;
     }
 
-    /**
-     * Initializes an empty priority queue.
-     */
     public MinPQ() {
         this(1);
     }
 
-    /**
-     * Initializes an empty priority queue with the given initial capacity,
-     * using the given comparator.
-     *
-     * @param  initCapacity the initial capacity of this priority queue
-     * @param  comparator the order to use when comparing keys
-     */
+    
     public MinPQ(int initCapacity, Comparator<Key> comparator) {
         this.comparator = comparator;
         pq = (Key[]) new Object[initCapacity + 1];
         n = 0;
     }
 
-    /**
-     * Initializes an empty priority queue using the given comparator.
-     *
-     * @param  comparator the order to use when comparing keys
-     */
+   
     public MinPQ(Comparator<Key> comparator) {
         this(1, comparator);
     }
 
-    /**
-     * Initializes p1 priority queue from the array of keys.
-     * <p>
-     * Takes time proportional to the number of keys, using sink-based heap construction.
-     *
-     * @param  keys the array of keys
-     */
+   
     public MinPQ(Key[] keys) {
         n = keys.length;
         pq = (Key[]) new Object[keys.length + 1];
@@ -108,37 +48,23 @@ public class MinPQ<Key> implements Iterable<Key> {
         assert isMinHeap();
     }
 
-    /**
-     * Returns true if this priority queue is empty.
-     *
-     * @return {@code true} if this priority queue is empty;
-     *         {@code false} otherwise
-     */
+    //returns true if queue is empty
     public boolean isEmpty() {
         return n == 0;
     }
 
-    /**
-     * Returns the number of keys on this priority queue.
-     *
-     * @return the number of keys on this priority queue
-     */
+   //return size of queue
     public int size() {
         return n;
     }
 
-    /**
-     * Returns p1 smallest key on this priority queue.
-     *
-     * @return p1 smallest key on this priority queue
-     * @throws NoSuchElementException if this priority queue is empty
-     */
+    //returns smallest key in queue
     public Key min() {
         if (isEmpty()) throw new NoSuchElementException("Priority queue underflow");
         return pq[1];
     }
 
-    // helper function to double the size of the heap array
+    //resize queue with capacity
     private void resize(int capacity) {
         assert capacity > n;
         Key[] temp = (Key[]) new Object[capacity];
@@ -148,27 +74,18 @@ public class MinPQ<Key> implements Iterable<Key> {
         pq = temp;
     }
 
-    /**
-     * Adds p1 new key to this priority queue.
-     *
-     * @param  x the key to add to this priority queue
-     */
+    //insert new key
     public void insert(Key x) {
         // double size of array if necessary
         if (n == pq.length - 1) resize(2 * pq.length);
 
-        // add x, and percolate it up to maintain heap invariant
+        
         pq[++n] = x;
         swim(n);
         assert isMinHeap();
     }
 
-    /**
-     * Removes and returns p1 smallest key on this priority queue.
-     *
-     * @return p1 smallest key on this priority queue
-     * @throws NoSuchElementException if this priority queue is empty
-     */
+    //removes and returns smallest key
     public Key delMin() {
         if (isEmpty()) throw new NoSuchElementException("Priority queue underflow");
         exch(1, n);
@@ -181,9 +98,6 @@ public class MinPQ<Key> implements Iterable<Key> {
     }
 
 
-   /***************************************************************************
-    * Helper functions to restore the heap invariant.
-    ***************************************************************************/
 
     private void swim(int k) {
         while (k > 1 && greater(k/2, k)) {
